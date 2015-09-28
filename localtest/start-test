@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+export PORT=1234
+export MONO_INSTALLED=yes
+#export ENVIRONMENT_TYPE=dev
+
+killall nginx
+killall mono
+
+mkdir -p /app
+rm -rf /app/*
+
+cp -r ../../heroku-buildpack-test/builddir/* /app
+../nginx/start

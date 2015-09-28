@@ -11,6 +11,30 @@ erb /app/nginx/nginx.conf.erb > /app/nginx/nginx.conf
 mkdir -p /app/nginx/logs
 touch /app/nginx/logs/access.log /app/nginx/logs/error.log
 
+FASTCGI_ROOT=/app/xsp/bin/
+if [ -n "${MONO_INSTALLED}" ]; then
+	FASTCGI_ROOT=""
+fi
+
+# try to get the ENVIRONMENT_TYPE environment variable, if missing, use the default value 'prod' 
+ENVIRONMENT_TYPE=${ENVIRONMENT_TYPE:-prod}
+
+# init the APPLICATIONS_PARAM with the default value, the first website in /app/_PublishedWebsites/
+APPLICATIONS_PARAM=/:/app/_PublishedWebsites/`ls /app/_PublishedWebsites/ | head -1`
+
+# get the webapplications.xxxx.config files if present
+APPCONFIG=$(find /app/_PublishedWebsites/ -maxdepth 2 -iname "webapplications.${ENVIRONMENT_TYPE}.config")
+
+if [ "${APPCONFIG}" != "" ]; then
+	# this iterates the webapplications.xxxx.config files and concatenates the contents using ',' as separator
+	# IFS='/' read -a array <<< "$file" -> splits the file path by '/', the third element is the containing folder of the website
+	# cat $file | sed -e "s/\:\./\:\/app\/_PublishedWebsites\/${array[3]}/g" -> this reads the file and replaces ':.' with the absolute path to the deployed site
+	# sed -e 's/,$//g' -> this removes the trailing comma
+	# sed -e '1s/^\xef\xbb\xbf//' -> this remove the BOM headers
+
+	APPLICATIONS_PARAM=$(for file in $APPCONFIG; do IFS='/' read -a array <<< "$file"; cat $file | sed -e "s/\:\./\:\/app\/_PublishedWebsites\/${array[3]}/g" -e 's/,$//g' -e '1s/^\xef\xbb\xbf//'; echo -n ','; done | sed -e 's/,$//g')
+fi
+
 #Start log redirection.
 (
     #Redirect NGINX logs to stdout
@@ -20,8 +44,8 @@ touch /app/nginx/logs/access.log /app/nginx/logs/error.log
 
 #Start app server
 (
-    MONO_OPTIONS=--server /app/xsp/bin/fastcgi-mono-server4 \
-        /applications=/:/app/_PublishedWebsites/`ls /app/_PublishedWebsites/ | head -1` \
+    MONO_OPTIONS=--server ${FASTCGI_ROOT}fastcgi-mono-server4 \
+        /applications=${APPLICATIONS_PARAM} \
         /socket=unix:/tmp/nginx.socket
     echo 'app' >$psmgr
 ) &

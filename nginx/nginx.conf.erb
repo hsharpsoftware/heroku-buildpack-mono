@@ -34,6 +34,9 @@ http {
             fastcgi_pass unix:/tmp/nginx.socket;
             include fastcgi_params;
         }
+
+        include server_config;    
+        
     }
 }
 
