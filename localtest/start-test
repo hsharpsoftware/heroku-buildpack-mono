@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export PORT=1234
-export MONO_INSTALLED=yes
+#export MONO_INSTALLED=yes
 #export ENVIRONMENT_TYPE=dev
 export USE_HYPERFASTCGI=TRUE
 
