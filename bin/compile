@@ -7,6 +7,7 @@ set -e
 DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
 MONO_VERSION="3.10.0"
 XSP_VERSION="8a31bc625727594d42f94173768bee5cf8afd0a4"
+HYPERFASTCGI_PATH="https://stefan-mono.s3-eu-west-1.amazonaws.com/hyperfastcgi-0.4.4.0.tar.gz"
 
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -97,6 +98,12 @@ if [ -d "$BUILD_DIR/_PublishedWebsites/" ]; then
   conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/xsp-${XSP_VERSION}.tar.gz ${XSP_CACHE_LOCATION}
   cp -r ${XSP_CACHE_LOCATION}/xsp .
   cp -r ${XSP_CACHE_LOCATION}/xsp/lib/mono/gac/* ./mono/lib/mono/gac/
+
+  #donwloading HyperFastCgi
+  HYPERFASTCGI_CACHE_LOCATION=${CACHE_DIR}/${STACK}/hyperfastcgi
+  conditional_download $HYPERFASTCGI_PATH $HYPERFASTCGI_CACHE_LOCATION
+  cp -r ${HYPERFASTCGI_CACHE_LOCATION}/hyperfastcgi .
+  cp -r ${HYPERFASTCGI_CACHE_LOCATION}/hyperfastcgi/lib/mono/gac/* ./mono/lib/mono/gac/
 
   NGINX_CACHE_PATH=${CACHE_DIR}/${STACK}/nginx
   conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/nginx.tar.gz ${NGINX_CACHE_PATH}

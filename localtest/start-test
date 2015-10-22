@@ -3,12 +3,15 @@
 export PORT=1234
 export MONO_INSTALLED=yes
 #export ENVIRONMENT_TYPE=dev
+export USE_HYPERFASTCGI=TRUE
 
 killall nginx
 killall mono
 
 mkdir -p /app
 rm -rf /app/*
+rm /tmp/nginx.socket
 
 cp -r ../../heroku-buildpack-test/builddir/* /app
 ../nginx/start
+

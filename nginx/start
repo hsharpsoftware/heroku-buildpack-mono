@@ -35,6 +35,11 @@ if [ "${APPCONFIG}" != "" ]; then
 	APPLICATIONS_PARAM=$(for file in $APPCONFIG; do IFS='/' read -a array <<< "$file"; cat $file | sed -e "s/\:\./\:\/app\/_PublishedWebsites\/${array[3]}/g" -e 's/,$//g' -e '1s/^\xef\xbb\xbf//'; echo -n ','; done | sed -e 's/,$//g')
 fi
 
+APP_CMD="${FASTCGI_ROOT}fastcgi-mono-server4 /applications=${APPLICATIONS_PARAM} /socket=unix:/tmp/nginx.socket"
+if [ "${USE_HYPERFASTCGI}" != "" ]; then
+	APP_CMD="/app/hyperfastcgi/HyperFastCgi-start /config=/app/hyperfastcgi/server.config /applications=${APPLICATIONS_PARAM} /loglevels=All /printlog /addtrailingslash=true"
+fi
+
 #Start log redirection.
 (
     #Redirect NGINX logs to stdout
@@ -44,9 +49,7 @@ fi
 
 #Start app server
 (
-    MONO_OPTIONS=--server ${FASTCGI_ROOT}fastcgi-mono-server4 \
-        /applications=${APPLICATIONS_PARAM} \
-        /socket=unix:/tmp/nginx.socket
+    MONO_OPTIONS=--server $APP_CMD
     echo 'app' >$psmgr
 ) &
 
