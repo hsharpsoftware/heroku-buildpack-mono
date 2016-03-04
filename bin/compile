@@ -4,8 +4,7 @@
 # fail fast
 set -e
 
-DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
-MONO_VERSION="3.10.0"
+DEPENDENCY_S3_BUCKET_PATH="https://stefan-mono.s3-eu-west-1.amazonaws.com"
 XSP_VERSION="8a31bc625727594d42f94173768bee5cf8afd0a4"
 HYPERFASTCGI_PATH="https://stefan-mono.s3-eu-west-1.amazonaws.com/hyperfastcgi-0.4.4.0.cedar-14.tar.gz"
 
@@ -40,6 +39,11 @@ export_env_dir() {
 }
 
 export_env_dir $ENV_DIR
+
+
+MONO_VERSION=${MONO_VERSION:-3.10.0}
+echo "-----> Using mono $MONO_VERSION"
+
 export ENVIRONMENT_TYPE=${ENVIRONMENT_TYPE:-prod}
 
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
