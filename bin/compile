@@ -22,7 +22,6 @@ function conditional_download() {
   TESTDIR="$3"
 
   echo "-----> We need to have ${TESTDIR}:"
-  ls -laF ${TESTDIR}
   if [ ! -d ${TESTDIR} ]; then
     rm -rf ${DESTINATION}
     mkdir -p ${DESTINATION}
