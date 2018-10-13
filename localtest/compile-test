@@ -11,4 +11,4 @@ rm -rf /app/*
 rm -rf $PROJECT_ROOT/builddir/nginx
 rm -rf $PROJECT_ROOT/builddir/_PublishedWebsites
 
-../bin/compile $PROJECT_ROOT $PROJECT_ROOT/cachedir $PROJECT_ROOT/envdir
+../bin/compile $PROJECT_ROOT/builddir $PROJECT_ROOT/cachedir $PROJECT_ROOT/envdir
