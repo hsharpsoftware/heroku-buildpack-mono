@@ -332,3 +332,9 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+builddir/
+!builddir/.gitkeep
+WebApplication1/mono
+.config
+cachedir/
+!cachedir/.gitkeep
