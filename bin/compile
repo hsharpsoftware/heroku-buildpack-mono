@@ -12,6 +12,9 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+echo "-----> Called with BUILD_DIR $BUILD_DIR"
+echo "-----> Called with CACHE_DIR $CACHE_DIR"
+echo "-----> Called with ENV_DIR $ENV_DIR"
 
 function conditional_download() {
   DOWNLOAD_URL="$1"
@@ -20,7 +23,7 @@ function conditional_download() {
   if [ ! -d ${DESTINATION} ]; then
     rm -rf ${DESTINATION}
     mkdir -p ${DESTINATION}
-    echo "-----> Downloading ${DOWNLOAD_URL}"
+    echo "-----> Downloading ${DOWNLOAD_URL} to ${DESTINATION}"
     curl ${DOWNLOAD_URL} -s | tar xz -C ${DESTINATION}
   fi
 }
