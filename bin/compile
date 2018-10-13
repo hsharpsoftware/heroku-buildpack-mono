@@ -20,6 +20,8 @@ function conditional_download() {
   DOWNLOAD_URL="$1"
   DESTINATION="$2"
 
+  echo "-----> We need to have ${DESTINATION}:"
+  ls -laF ${DESTINATION}
   if [ ! -d ${DESTINATION} ]; then
     rm -rf ${DESTINATION}
     mkdir -p ${DESTINATION}
