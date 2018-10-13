@@ -337,3 +337,8 @@ ASALocalRun/
 .config
 cachedir/
 !cachedir/.gitkeep
+project/builddir/hyperfastcgi
+project/builddir/project/builddir
+project/builddir/xsp
+
+
