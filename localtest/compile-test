@@ -3,7 +3,7 @@
 export STACK=cedar-14
 export MONO_INSTALLED=yes
 export MONO_VERSION=4.0.5.1
-PROJECT_ROOT=./WebApplication1
+PROJECT_ROOT=./project
 
 mkdir -p /app
 
