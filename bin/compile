@@ -80,8 +80,8 @@ if [ -z "${MONO_INSTALLED}" ]; then
 fi
 
 # Add certs to trust store
-cp -r ${LP_DIR}/.config ~/.
-cp -r ${LP_DIR}/.config ${BUILD_DIR}/.
+cp -r ${LP_DIR}/.config ~/
+cp -r ${LP_DIR}/.config ${BUILD_DIR}/
 
 NUGET_EXECUTABLE_PATH=${CACHE_DIR}/nuget.exe
 if [ ! -f ${NUGET_EXECUTABLE_PATH} ]; then
