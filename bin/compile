@@ -19,10 +19,11 @@ echo "-----> Called with ENV_DIR $ENV_DIR"
 function conditional_download() {
   DOWNLOAD_URL="$1"
   DESTINATION="$2"
+  TESTDIR="$2"
 
-  echo "-----> We need to have ${DESTINATION}:"
-  ls -laF ${DESTINATION}
-  if [ ! -d ${DESTINATION} ]; then
+  echo "-----> We need to have ${TESTDIR}:"
+  ls -laF ${TESTDIR}
+  if [ ! -d ${TESTDIR} ]; then
     rm -rf ${DESTINATION}
     mkdir -p ${DESTINATION}
     echo "-----> Downloading ${DOWNLOAD_URL} to ${DESTINATION}"
@@ -56,7 +57,7 @@ cd ${BUILD_DIR}
 mkdir -p ${CACHE_DIR}
 
 MONO_CACHE_LOCATION=${CACHE_DIR}/$STACK/mono-${MONO_VERSION}
-conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/mono-${MONO_VERSION}-full.tar.gz ${MONO_CACHE_LOCATION}
+conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/mono-${MONO_VERSION}-full.tar.gz ${MONO_CACHE_LOCATION} ${MONO_CACHE_LOCATION}/mono
 
 # Copy mono from cache to where we're building the slug
 cp -r "${MONO_CACHE_LOCATION}/mono" .
@@ -106,18 +107,18 @@ cp -n ${LP_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
 
 if [ -d "$BUILD_DIR/_PublishedWebsites/" ]; then
   XSP_CACHE_LOCATION=${CACHE_DIR}/${STACK}/xsp-${XSP_VERSION}
-  conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/xsp-${XSP_VERSION}.tar.gz ${XSP_CACHE_LOCATION}
+  conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/xsp-${XSP_VERSION}.tar.gz ${XSP_CACHE_LOCATION} ${XSP_CACHE_LOCATION}/xsp
   cp -r ${XSP_CACHE_LOCATION}/xsp .
   cp -r ${XSP_CACHE_LOCATION}/xsp/lib/mono/gac/* ./mono/lib/mono/gac/
 
   #donwloading HyperFastCgi
   HYPERFASTCGI_CACHE_LOCATION=${CACHE_DIR}/${STACK}/hyperfastcgi-0.4.4.0
-  conditional_download $HYPERFASTCGI_PATH $HYPERFASTCGI_CACHE_LOCATION
+  conditional_download $HYPERFASTCGI_PATH $HYPERFASTCGI_CACHE_LOCATION ${HYPERFASTCGI_CACHE_LOCATION}/hyperfastcgi
   cp -r ${HYPERFASTCGI_CACHE_LOCATION}/hyperfastcgi .
   cp -r ${HYPERFASTCGI_CACHE_LOCATION}/hyperfastcgi/lib/mono/gac/* ./mono/lib/mono/gac/
 
   NGINX_CACHE_PATH=${CACHE_DIR}/${STACK}/nginx
-  conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/nginx.tar.gz ${NGINX_CACHE_PATH}
+  conditional_download ${DEPENDENCY_S3_BUCKET_PATH}/${STACK}/nginx.tar.gz ${NGINX_CACHE_PATH} ${NGINX_CACHE_PATH}/nginx
 
   mkdir -p ${BUILD_DIR}/nginx
   cp ${NGINX_CACHE_PATH}/nginx ${BUILD_DIR}/nginx/.
