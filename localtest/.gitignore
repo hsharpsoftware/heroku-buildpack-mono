@@ -334,7 +334,6 @@ ASALocalRun/
 .localhistory/
 **/builddir/mono
 **/builddir/**/mono
-WebApplication1/mono
 .config
 cachedir/
 !cachedir/.gitkeep
