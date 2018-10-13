@@ -19,7 +19,7 @@ echo "-----> Called with ENV_DIR $ENV_DIR"
 function conditional_download() {
   DOWNLOAD_URL="$1"
   DESTINATION="$2"
-  TESTDIR="$2"
+  TESTDIR="$3"
 
   echo "-----> We need to have ${TESTDIR}:"
   ls -laF ${TESTDIR}
